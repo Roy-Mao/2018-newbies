@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
       sentRemits: [],
       maxPage: 1,
       hasCreditCard: hasCreditCard,
-      creditCardUpdateStatus: 100,
+      creditCardUpdateStatus: false,
       isActiveNewRemitForm: false,
       isChargeConfirm: false,
       target: "",
