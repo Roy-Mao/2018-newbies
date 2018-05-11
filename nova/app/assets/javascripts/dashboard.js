@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var last4 = result.last4
             self.creditCardUpdateStatus = true;
             self.hasCreditCard = true;
-            document.getElementById('card_status').innerText = `登録済クレジットカードの情報 : 下4桁は${last4}です。`
+            document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。'
             setTimeout(function(){
               self.creditCardUpdateStatus = false;
             }, 5000)
