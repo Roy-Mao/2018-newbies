@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
       sentRemits: [],
       maxPage: 1,
       hasCreditCard: hasCreditCard,
+      creditCardUpdateStatus: false,
       isActiveNewRemitForm: false,
       isChargeConfirm: false,
       target: "",
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     beforeMount: function() {
       var self = this;
       self.page = 1;
+
       api.get('/api/user').then(function(json) {
         self.user = json;
       });
@@ -139,8 +141,14 @@ document.addEventListener('DOMContentLoaded', function() {
           then(function(result) {
             return api.post('/api/credit_card', { credit_card: { source: result.token.id }});
           }).
-          then(function() {
+          then(function(result) {
+            const last4 = result.last4
+            self.creditCardUpdateStatus = true;
             self.hasCreditCard = true;
+            document.getElementById('card_status').innerText = `登録済クレジットカードの情報 : 下4桁は${last4}です。`
+            setTimeout(() => {
+              self.creditCardUpdateStatus = false;
+            }, 5000)
           });
       },
       addTarget: function(event) {
