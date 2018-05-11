@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
     data: {
       page: 1,
       currentTab: 'remits',
-      amount: 0,
       chargeForm: 0,
       chargeAmount: 0,
       charges: [],
@@ -72,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
       user: {
         email: "",
         nickname: "",
+        amount: 0
       },
       newRemitRequest: {
         emails: [],
@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       api.get('/api/charges').then(function(json) {
-        self.amount = json.amount;
         self.charges = json.charges;
       });
 
@@ -123,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
-            self.amount += amount
+            self.user.amount += amount
             self.charges.unshift(json);
             self.isChargeConfirm = false;
           }).
@@ -163,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests', this.newRemitRequest).
           then(function() {
+            // [TODO] fix change badge
             self.newRemitRequest = {
               emails: [],
               amount: 0,
@@ -177,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/accept').
           then(function() {
+            // [TODO] fix change badge
             self.recvRemits = self.recvRemits.filter(function(r) {
               if(r.id != id) {
                 return true
@@ -193,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/reject').
           then(function() {
+            // [TODO] fix change badge
             self.recvRemits = self.recvRemits.filter(function(r) {
               return r.id != id;
             });
