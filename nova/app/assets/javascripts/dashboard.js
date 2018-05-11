@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(event) { event.preventDefault(); }
         var self = this;
 
-        const amount = self.chargeAmount;
+        var amount = self.chargeAmount;
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
             self.creditCardUpdateStatus = true;
             self.hasCreditCard = true;
             document.getElementById('card_status').innerText = `登録済クレジットカードの情報 : 下4桁は${last4}です。`
-            setTimeout(() => {
+            setTimeout(function() {
               self.creditCardUpdateStatus = false;
             }, 5000)
           });
