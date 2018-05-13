@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
       sentRemits: [],
       maxPage: 1,
       hasCreditCard: hasCreditCard,
+      creditCardUpdateStatus: false,
       isActiveNewRemitForm: false,
       isChargeConfirm: false,
       target: "",
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     beforeMount: function() {
       var self = this;
       self.page = 1;
+
       api.get('/api/user').then(function(json) {
         self.user = json;
       });
@@ -88,6 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
       api.get('/api/charges').then(function(json) {
         self.amount = json.amount;
         self.charges = json.charges;
+        for (var i = 0; i < self.charges.length; i++){
+          var strDateTime = self.charges[i]['created_at'];
+          var myDate = new Date(strDateTime);
+          self.charges[i]['created_at'] = myDate.toLocaleString();
+        }
       });
 
       api.get('/api/remit_requests').
@@ -120,8 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
 
         self.isChargeConfirm = false;
-
-        const amount = self.chargeAmount;
+        var amount = self.chargeAmount;
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
@@ -140,8 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
           then(function(result) {
             return api.post('/api/credit_card', { credit_card: { source: result.token.id }});
           }).
-          then(function() {
+          then(function(result) {
+            var last4 = result.last4
+            self.creditCardUpdateStatus = true;
             self.hasCreditCard = true;
+            document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。'
+            setTimeout(function(){
+              self.creditCardUpdateStatus = false;
+            }, 5000)
           });
       },
       addTarget: function(event) {
@@ -160,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       sendRemitRequest: function(event) {
         if(event) { event.preventDefault(); }
-
         var self = this;
         api.post('/api/remit_requests', this.newRemitRequest).
           then(function() {

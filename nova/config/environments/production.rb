@@ -64,7 +64,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :aws_sdk
 
-  host = 'mf2018.youki.io'
+  host = 'http://app-panda-2097416765.ap-northeast-1.elb.amazonaws.com'
 
   config.action_mailer.default_url_options = { host: host, protocol: 'https'}
 
