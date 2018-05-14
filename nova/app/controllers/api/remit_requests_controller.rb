@@ -25,27 +25,27 @@ class Api::RemitRequestsController < Api::ApplicationController
 
   def accept
     @remit_request = RemitRequest.find(params[:id])
-    @remit_request.update!(accepted_at: Time.now)
-    @remit_request.update!(status: :accepted)
 
-    amount = current_user.amount - @remit_request.amount
-    current_user.update(amount: amount)
+    @amount = 0
+    if @remit_request.status == 'outstanding'
+      @remit_request.update!(status: :accepted)
+      @amount = current_user.amount - @remit_request.amount
+      current_user.update(amount: @amount)
+    end
+    render json: {amount: @amount}, status: :ok
 
-    render json: {}, status: :ok
   end
 
   def reject
     @remit_request = RemitRequest.find(params[:id])
-    @remit_request.update!(rejected_at: Time.now)
-    @remit_request.update!(status: :rejected)
+    @remit_request.update!(status: :rejected) if @remit_request.status == 'outstanding'
 
     render json: {}, status: :ok
   end
 
   def cancel
     @remit_request = RemitRequest.find(params[:id])
-    @remit_request.update!(canceled_at: Time.now)
-    @remit_request.update!(status: :canceled)
+    @remit_request.update!(status: :canceled) if @remit_request.status == 'outstanding'
 
     render json: {}, status: :ok
   end

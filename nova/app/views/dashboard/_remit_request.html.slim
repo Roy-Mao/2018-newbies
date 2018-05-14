@@ -15,17 +15,18 @@
           th.has-text-right
       tbody
         tr(v-for="remit in recvRemits")
-          td(:class= "{'is-user-email': user.email === remit.user.email  }")= '{{remit.user.email}}'
-          td(:class= "{'is-user-email': user.email === remit.target.email}")= '{{remit.target.email}}'
+          td(:class= "{'is-user-email': user.email === remit.target.email  }")= '{{remit.target.email}}'
+          td(:class= "{'is-user-email': user.email === remit.user.email}")= '{{remit.user.email}}'
           td= '{{remit.amount}}円'
           td= '{{remit.status}}'
+          td
             .status-button(v-show="user.email === remit.target.email")
               .buttons.is-right
-                button.button.is-small.is-success(:disabled="amount < remit.amount" @click='accept(remit.id, $event)') Accept
-                button.button.is-small.is-danger(@click='reject(remit.id, $event)') Reject
+                button.button.is-small.is-link.is-outlined(@click='cancel(remit.id, $event)') Cancel
             .status-button(v-show="user.email === remit.user.email")
               .buttons.is-right
-                button.button.is-small.is-link.is-outlined(:disabled="amount < remit.amount" @click='accept(remit.id, $event)') Cancel
+                button.button.is-small.is-success(@click='accept(remit.id, $event)') Accept
+                button.button.is-small.is-danger(@click='reject(remit.id, $event)') Reject
 
     nav.pagination
       ul.pagination-list(v-for="(item, index) in new Array(maxPage)")
