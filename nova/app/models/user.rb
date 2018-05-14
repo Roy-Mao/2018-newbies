@@ -18,7 +18,6 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true, format: { with: VALID_PASSWORD_REGEX }
 
-  after_create :create_stripe_customer
 
   def self.new_token
     SecureRandom.urlsafe_base64
@@ -34,6 +33,7 @@ class User < ApplicationRecord
   # Activates an account
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
+    create_stripe_customer
   end
 
   # Returns true if the given token matches the digest
