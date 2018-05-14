@@ -16,9 +16,7 @@ class AccountActivationsController < ApplicationController
   private
 
   def token_time_valid
-    created_time = @user.created_at
-    return true if created_time < 5.minutes.ago
-    return false
+    @user.created_at <  5.minutes.ago
   end
 
 end
