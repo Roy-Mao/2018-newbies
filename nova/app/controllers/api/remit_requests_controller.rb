@@ -28,6 +28,9 @@ class Api::RemitRequestsController < Api::ApplicationController
     @remit_request.update!(accepted_at: Time.now)
     @remit_request.update!(status: :accepted)
 
+    amount = current_user.amount - @remit_request.amount
+    current_user.update(amount: amount)
+
     render json: {}, status: :ok
   end
 

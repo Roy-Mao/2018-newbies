@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_14_021617) do
+ActiveRecord::Schema.define(version: 2018_05_14_061717) do
 
   create_table "charges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -36,9 +36,6 @@ ActiveRecord::Schema.define(version: 2018_05_14_021617) do
     t.bigint "user_id", null: false
     t.bigint "target_id", null: false
     t.integer "amount", null: false
-    t.datetime "accepted_at"
-    t.datetime "rejected_at"
-    t.datetime "canceled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
@@ -60,6 +57,7 @@ ActiveRecord::Schema.define(version: 2018_05_14_021617) do
     t.string "remember_digest"
     t.string "reset_digest"
     t.datetime "reset_sent_at"
+    t.integer "amount", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

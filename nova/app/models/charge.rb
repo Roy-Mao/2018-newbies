@@ -15,6 +15,8 @@ class Charge < ApplicationRecord
       currency: 'jpy',
       customer: user.stripe_id
     )
+
+    user.update!(amount: user.amount + amount)
   rescue Stripe::StripeError => e
     errors.add(:user, e.code.to_s.to_sym)
     throw :abort
