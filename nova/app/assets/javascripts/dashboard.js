@@ -186,8 +186,11 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       accept: function(id, event) {
         if(event) { event.preventDefault(); }
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
+        event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
         console.log('accept')
         var self = this;
+
         api.post('/api/remit_requests/' + id + '/accept').
           then(function(result) {
             // console.log(self.recvRemits)
@@ -202,6 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       reject: function(id, event) {
         if(event) { event.preventDefault(); }
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
+        event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
         console.log('reject')
 
         var self = this;
@@ -214,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
       },
       cancel: function(id, event) {
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // cancel button
         if(event) { event.preventDefault(); }
         console.log('cancel')
 

@@ -29,7 +29,6 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
-
   # Activates an account
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
