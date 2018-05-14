@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :charge do
-    user { build(:user) }
+    user { build(:user, :with_activated) }
     amount 100
   end
 end

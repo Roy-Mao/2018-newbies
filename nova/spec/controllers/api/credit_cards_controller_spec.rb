@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::CreditCardsController, type: :controller do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :with_activated) }
 
   describe 'GET #show' do
     subject { get :show }
