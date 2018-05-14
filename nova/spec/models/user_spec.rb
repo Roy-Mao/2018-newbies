@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'User' do
-    subject(:user) { create(:user) }
+    subject(:user) { create(:user, :with_activated) }
 
     context 'validate' do
       it { is_expected.to be_valid }
@@ -38,8 +38,9 @@ RSpec.describe User, type: :model do
           expect(user.charges.count).to eq 1
         end
       end
+
       context 'credit_card' do
-        before { create(:credit_card, user_id: user.id, source: stripe.generate_card_token)}
+        before { create(:credit_card, user: user, source: stripe.generate_card_token) }
         it 'create credit_card' do
           expect(user.credit_card).not_to eq nil
         end
