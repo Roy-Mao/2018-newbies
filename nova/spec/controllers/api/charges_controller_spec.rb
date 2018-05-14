@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::ChargesController, type: :controller do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :with_activated) }
 
   describe 'GET #index' do
     subject { get :index }

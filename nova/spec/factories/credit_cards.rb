@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :credit_card do
-    user { create(:user) }
+    user { create(:user, :with_activated) }
   end
 end
