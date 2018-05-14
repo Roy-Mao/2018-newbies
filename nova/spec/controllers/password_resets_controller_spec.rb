@@ -15,7 +15,7 @@ RSpec.describe PasswordResetsController, type: :controller do
     subject { post :create, params: { password_reset: password_reset_params } }
 
     context "signupしているユーザーの場合" do
-      let(:user) { create(:user, :with_request_password_reset) }
+      let(:user) { create(:user, :with_activated, :with_request_password_reset) }
       let(:password_reset_params) { user.slice(:email) }
 
       it 'TOPページに遷移すること' do

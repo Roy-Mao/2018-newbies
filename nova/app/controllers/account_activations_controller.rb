@@ -12,4 +12,11 @@ class AccountActivationsController < ApplicationController
       redirect_to login_url
     end
   end
+
+  private
+
+  def token_time_expired?
+    @user.created_at < 5.minutes.ago
+  end
+
 end

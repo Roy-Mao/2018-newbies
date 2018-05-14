@@ -126,13 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if(event) { event.preventDefault(); }
         var self = this;
 
+        self.isChargeConfirm = false;
         var amount = self.chargeAmount;
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
             self.user.amount += amount
             self.charges.unshift(json);
-            self.isChargeConfirm = false;
           }).
           catch(function(err) {
             console.error(err);

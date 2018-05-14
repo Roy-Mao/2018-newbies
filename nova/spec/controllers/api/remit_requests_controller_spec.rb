@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::RemitRequestsController, type: :controller do
-  let(:user) { create(:user) }
-  let(:target) { create(:user) }
+  let(:user) { create(:user, :with_activated) }
+  let(:target) { create(:user, :with_activated) }
   let(:remit_request) { create(:remit_request, target: user) }
 
   describe 'GET #index' do
