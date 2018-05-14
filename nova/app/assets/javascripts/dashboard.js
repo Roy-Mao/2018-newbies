@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         then(function(json) {
           self.maxPage = json.max_pages
           self.recvRemits = json.remit_requests;
+          console.log(self.recvRemits[0].status);
           document.getElementsByClassName('pagination-link')[0].classList.add('is-current')
         });
 
@@ -189,13 +190,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/accept').
           then(function() {
+            // console.log(self.recvRemits)
+
             self.recvRemits = self.recvRemits.filter(function(r) {
-              if(r.id != id) {
-                return true
-              } else {
+              if(r.id == id) {
                 self.amount -= r.amount;
-                return false
               }
+              return true
             });
           });
       },
@@ -205,9 +206,10 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/reject').
           then(function() {
-            self.recvRemits = self.recvRemits.filter(function(r) {
-              return r.id != id;
-            });
+            // console.log(self.recvRemits)
+            // self.recvRemits = self.recvRemits.filter(function(r) {
+            //   return r.id != id;
+            // });
           });
       },
       updateUser: function(event) {

@@ -2,12 +2,15 @@
 
 class Api::RemitRequestsController < Api::ApplicationController
   def index
-    @remit_requests = current_user.received_remit_requests.page(params[:page])
-    page_limit = [@remit_requests.count, 1].max
-    pages = [current_user.received_remit_requests.count, 1].max / page_limit + 
-      ( current_user.received_remit_requests.count % page_limit ? 0 : 1)
+    all = RemitRequest.where("(user_id = ?) OR (target_id = ?)", current_user.id, current_user.id)
+    @remit_requests = all.page(params[:page])
+    remit_requests_count = all.count
 
-    render json:{max_pages: pages, remit_requests: @remit_requests.as_json(include: :user).to_a}
+    page_limit = [@remit_requests.count, 1].max
+    pages = [remit_requests_count, 1].max / page_limit + 
+      ( remit_requests_count % page_limit ? 0 : 1)
+
+    render json:{max_pages: pages, remit_requests: @remit_requests.as_json(include: [:user, :target] ).to_a}
   end
 
   def create
