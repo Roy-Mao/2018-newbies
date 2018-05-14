@@ -15,6 +15,8 @@ class RemitRequest < ApplicationRecord
   scope :canceled, ->(at = Time.current) { where(RemitRequest.arel_table[:canceled_at].lteq(at)) }
   scope :not_canceled, ->(at = Time.current) { where(canceled_at: nil).or(where(RemitRequest.arel_table[:canceled_at].gt(at))) }
 
+  enum status: { outstanding: 0, accepted: 1, rejected: 2, canceled: 3 }
+
   def outstanding?(at = Time.current)
     !accepted?(at) && !rejected?(at) && !canceled?(at)
   end

@@ -6,6 +6,7 @@ class Api::RemitRequestsController < Api::ApplicationController
     page_limit = [@remit_requests.count, 1].max
     pages = [current_user.received_remit_requests.count, 1].max / page_limit + 
       ( current_user.received_remit_requests.count % page_limit ? 0 : 1)
+
     render json:{max_pages: pages, remit_requests: @remit_requests.as_json(include: :user).to_a}
   end
 
@@ -13,7 +14,6 @@ class Api::RemitRequestsController < Api::ApplicationController
     params[:emails].each do |email|
       user = User.find_by(email: email)
       next unless user
-
       RemitRequest.create!(user: current_user, target: user, amount: params[:amount])
     end
 
@@ -23,6 +23,7 @@ class Api::RemitRequestsController < Api::ApplicationController
   def accept
     @remit_request = RemitRequest.find(params[:id])
     @remit_request.update!(accepted_at: Time.now)
+    @remit_request.update!(status: :accepted)
 
     render json: {}, status: :ok
   end
@@ -30,6 +31,7 @@ class Api::RemitRequestsController < Api::ApplicationController
   def reject
     @remit_request = RemitRequest.find(params[:id])
     @remit_request.update!(rejected_at: Time.now)
+    @remit_request.update!(status: :rejected)
 
     render json: {}, status: :ok
   end
@@ -37,6 +39,7 @@ class Api::RemitRequestsController < Api::ApplicationController
   def cancel
     @remit_request = RemitRequest.find(params[:id])
     @remit_request.update!(canceled_at: Time.now)
+    @remit_request.update!(status: :canceled)
 
     render json: {}, status: :ok
   end
