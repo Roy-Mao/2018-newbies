@@ -2,6 +2,7 @@
 
 class SessionsController < ApplicationController
   def new
+    redirect_to dashboard_path, alert:'ログイン済みです' if current_user
     @user = User.new
   end
 
@@ -12,7 +13,7 @@ class SessionsController < ApplicationController
         log_in @user
         redirect_to dashboard_path, notice: 'ログインしました'
       else
-        flash[:alert] = 'アカウント有効化のメールを送信しました。'
+        flash[:alert] = 'アカウント有効化のメールを確認してください。'
         redirect_to root_url
       end
     else
