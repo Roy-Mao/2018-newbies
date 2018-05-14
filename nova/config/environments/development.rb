@@ -31,7 +31,7 @@ Rails.application.configure do
   # --------------mailer setting from here------------
   # Don't care if the mailer can't send.
 
-  # config.action_mailer.delivery_method = :test
+   config.action_mailer.delivery_method = :test
 
   # config.action_mailer.delivery_method = :aws_sdk
 
@@ -43,7 +43,7 @@ Rails.application.configure do
 
   config.action_mailer.raise_delivery_errors = true
 
-  config.action_mailer.delivery_method = :aws_sdk
+  #config.action_mailer.delivery_method = :aws_sdk
 
   # SMTP setting
   #config.action_mailer.smtp_settings = {
