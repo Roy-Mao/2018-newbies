@@ -14,7 +14,7 @@
       tbody
         tr(v-for="remit in recvRemits")
           td= '{{remit.user.nickname}}({{remit.user.email}})'
-          td= '{{remit.amount}}円'
+          td= '{{-remit.amount}}円'
           td
             .buttons.is-right
               button.button.is-small(:disabled="amount < remit.amount" @click='accept(remit.id, $event)') Accept
