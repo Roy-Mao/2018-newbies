@@ -30,6 +30,7 @@ gem 'aws-sdk-rails'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'kaminari'
+gem 'devise'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -50,6 +51,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'spring-commands-rspec', require: false
   gem 'brakeman', :require => false
+  gem "letter_opener"
 end
 
 group :test do
