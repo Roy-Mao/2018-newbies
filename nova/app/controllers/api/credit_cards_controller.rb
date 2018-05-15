@@ -3,14 +3,14 @@
 class Api::CreditCardsController < Api::ApplicationController
   def show
     @credit_card = current_user.credit_card
-    render json: @credit_card.as_json(except: %i[stripe_id])
+    render json: @credit_card.as_json(only: :last4)
   end
 
   def create
     current_user.credit_card.try(:destroy)
     @credit_card = CreditCard.create!(credit_card_params.merge(user: current_user))
 
-    render json: @credit_card.as_json(only: %i[last4]), status: :created
+    render json: @credit_card.as_json(only: :last4), status: :created
   end
 
   protected
