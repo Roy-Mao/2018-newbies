@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       return fetch(path, opts).then(function(response) {
+        console.log(response);
         return response.json();
       });
     },
@@ -147,10 +148,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return api.post('/api/credit_card', { credit_card: { source: result.token.id }});
           }).
           then(function(result) {
-            var last4 = result.last4
-            self.creditCardUpdateStatus = true;
-            self.hasCreditCard = true;
-            document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。'
+            if (result.last4){
+              var last4 = result.last4
+              self.creditCardUpdateStatus = true;
+              self.hasCreditCard = true;
+              document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。';
+            } else {
+              document.getElementById('card_status').innerText = 'エラーが発生しました。';
+            }
             setTimeout(function(){
               self.creditCardUpdateStatus = false;
             }, 5000)
