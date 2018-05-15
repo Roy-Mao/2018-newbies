@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class Charge < ApplicationRecord
+  MIN_REMIT_AMOUNT = 50
+  MAX_REMIT_AMOUNT = 100_000
   belongs_to :user
 
-  validates :amount, numericality: { greater_then: 0 }
+  validates :amount, numericality: { greater_than_or_equal_to: MIN_REMIT_AMOUNT, less_than_or_equal_to: MAX_REMIT_AMOUNT, only_integer: true }, presence: true
 
   after_create :create_stripe_charge
 
