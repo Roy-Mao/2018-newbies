@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
       creditCardUpdateStatus: false,
       isActiveNewRemitForm: false,
       isChargeConfirm: false,
+      updateCreditCardStatus: '',
+      updateCreditCardStatusMessage: '',
       target: "",
       user: {
         email: "",
@@ -149,12 +151,16 @@ document.addEventListener('DOMContentLoaded', function() {
           then(function(result) {
             if (result.last4){
               var last4 = result.last4
-              self.creditCardUpdateStatus = true;
               self.hasCreditCard = true;
+              self.updateCreditCardStatusMessage = "クレジットカードの変更が完了しました。"
+              self.updateCreditCardStatus = 'success';
               document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。';
             } else {
-              document.getElementById('card_status').innerText = 'エラーが発生しました。';
+              self.updateCreditCardStatusMessage = 'エラーが発生しました。';
+              self.updateCreditCardStatus = 'failed';
             }
+
+            self.creditCardUpdateStatus = true;
             setTimeout(function(){
               self.creditCardUpdateStatus = false;
             }, 5000)

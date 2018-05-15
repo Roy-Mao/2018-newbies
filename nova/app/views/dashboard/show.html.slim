@@ -5,13 +5,19 @@
   .columns
     .column.is-12
       .credit_card_info
-        .message.is-success(v-show="creditCardUpdateStatus")
+        .message(
+            v-show="creditCardUpdateStatus" 
+            v-bind:class='{\
+              "is-primary":updateCreditCardStatus == "success", \
+              "is-info":updateCreditCardStatus == "failed" \
+            }')
           .message-body
-            = 'クレジットカードの変更が完了しました。'
+            = '{{updateCreditCardStatusMessage}}'
 
         - if current_user.credit_card
           - credit_card = current_user.credit_card
           p#card_status
+          
             = "登録済クレジットカードの情報 : 下4桁は#{credit_card.last4}です。"
           .heading Change Credit Card
         - else
