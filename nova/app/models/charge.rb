@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Charge < ApplicationRecord
-  MIN_REMIT_AMOUNT = 1
+  MIN_REMIT_AMOUNT = 50
   MAX_REMIT_AMOUNT = 100_000
   belongs_to :user
 
