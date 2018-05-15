@@ -28,17 +28,20 @@ RSpec.describe Api::UsersController, type: :controller do
         @json = JSON.parse(response.body)
       end
 
-      it 'include nickname' do expect(@json.include?("nickname")).to eq true end
-      it 'include email'    do expect(@json.include?("email")).to eq true end
-      it 'include amount'   do expect(@json.include?("amount")).to eq true end
+      it 'include user' do
+        expect(@json).to have_key('nickname')
+        expect(@json).to have_key('email')
+        expect(@json).to have_key('amount')
+      end
 
-      it 'not include id'                do expect(@json.include?("id")).to eq false end
-      it 'not include stripe_id'         do expect(@json.include?("stripe_id")).to eq false end
-      it 'not include activated'         do expect(@json.include?("activated")).to eq false end
-      it 'not include password_digest'   do expect(@json.include?("password_digest")).to eq false end
-      it 'not include activation_digest' do expect(@json.include?("activation_digest")).to eq false end
-      it 'not include reset_digest'      do expect(@json.include?("reset_digest")).to eq false end
-
+      it 'not include user' do
+        expect(@json).not_to have_key('id')
+        expect(@json).not_to have_key('stripe_id')
+        expect(@json).not_to have_key('activated')
+        expect(@json).not_to have_key('password_digest')
+        expect(@json).not_to have_key('activation_digest')
+        expect(@json).not_to have_key('reset_digest')
+      end
     end
   end
 

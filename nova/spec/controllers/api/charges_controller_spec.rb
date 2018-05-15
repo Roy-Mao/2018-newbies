@@ -24,17 +24,19 @@ RSpec.describe Api::ChargesController, type: :controller do
         login!(user)
         create(:charge, {user_id: user.id})
         get :index
-        @charge = JSON.parse(response.body)["charges"][0]
+        @json = JSON.parse(response.body)["charges"][0]
       end
 
-      it 'include amount' do expect(@charge.include?("amount")).to eq true end
-      it 'include created_at' do expect(@charge.include?("created_at")).to eq true end
-      #[TODO] accepted_at -> statusに変更する予定
-      xit 'include accepted_at' do expect(@charge.include?("accepted_at")).to eq true end
+      it 'include charges' do
+        expect(@json).to have_key('amount')
+        expect(@json).to have_key('created_at')
+      end
 
-      it 'not include id' do expect(@charge.include?("id")).to eq false end
-      it 'not include user_id' do expect(@charge.include?("user_id")).to eq false end
-
+      it 'not include charges' do
+        expect(@json).not_to have_key('id')
+        expect(@json).not_to have_key('user_id')
+        expect(@json).not_to have_key('stripe_id')
+      end
     end
   end
 

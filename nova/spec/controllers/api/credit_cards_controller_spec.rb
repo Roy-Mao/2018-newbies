@@ -26,11 +26,11 @@ RSpec.describe Api::CreditCardsController, type: :controller do
         @json = JSON.parse(@response.body)
       end
 
-      it 'include credit_card' do 
+      it 'include credit_card' do
         expect(@json).to have_key('last4')
       end
 
-      it 'not include credit_card' do 
+      it 'not include credit_card' do
         expect(@json).not_to have_key('brand')
         expect(@json).not_to have_key('user_id')
         expect(@json).not_to have_key('exp_year')
