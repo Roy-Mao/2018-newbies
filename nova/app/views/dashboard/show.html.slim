@@ -9,7 +9,7 @@
             v-show="creditCardUpdateStatus" 
             v-bind:class='{\
               "is-primary":updateCreditCardStatus == "success", \
-              "is-info":updateCreditCardStatus == "failed" \
+              "is-danger":updateCreditCardStatus == "failed" \
             }')
           .message-body
             = '{{updateCreditCardStatusMessage}}'
