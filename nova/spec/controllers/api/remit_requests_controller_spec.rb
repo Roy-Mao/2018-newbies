@@ -35,6 +35,73 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
         it { is_expected.to have_http_status(:ok) }
       end
     end
+
+    context 'check response' do
+      before do 
+        login!(user)
+        create(:remit_request, target: user)
+        get :index
+        @json = JSON.parse(response.body)
+      end
+
+      it 'include response' do
+        expect(@json).to have_key('max_pages')
+        expect(@json).to have_key('remit_requests')
+      end
+
+      it 'not include response' do
+        expect(@json).not_to have_key('id')
+        expect(@json).not_to have_key('user_id')
+        expect(@json).not_to have_key('stripe_id')
+      end
+
+      context 'remit_request' do
+        before do @remit_request = @json["remit_requests"].first end
+        it 'include remit_request' do
+          expect(@remit_request).to have_key('status')
+          expect(@remit_request).to have_key('amount')
+        end
+
+        it 'not include remit_request' do
+          expect(@remit_request).not_to have_key('id')
+          expect(@remit_request).not_to have_key('user_id')
+          expect(@remit_request).not_to have_key('target_id')
+        end
+
+        context 'user' do
+          it 'include user' do
+            expect(@remit_request["user"]).to have_key('email')
+          end
+
+          it 'not include user' do
+            expect(@remit_request["user"]).not_to have_key('id')
+            expect(@remit_request["user"]).not_to have_key('nickname')
+            expect(@remit_request["user"]).not_to have_key('stripe_id')
+            expect(@remit_request["user"]).not_to have_key('activated')
+            expect(@remit_request["user"]).not_to have_key('password_digest')
+            expect(@remit_request["user"]).not_to have_key('activation_digest')
+            expect(@remit_request["user"]).not_to have_key('reset_digest')
+            expect(@remit_request["user"]).not_to have_key('amount')
+          end
+        end
+        context 'target' do
+          it 'include target' do
+            expect(@remit_request["target"]).to have_key('email')
+          end
+
+          it 'not include target' do
+            expect(@remit_request["target"]).not_to have_key('id')
+            expect(@remit_request["target"]).not_to have_key('nickname')
+            expect(@remit_request["target"]).not_to have_key('stripe_id')
+            expect(@remit_request["target"]).not_to have_key('activated')
+            expect(@remit_request["target"]).not_to have_key('password_digest')
+            expect(@remit_request["target"]).not_to have_key('activation_digest')
+            expect(@remit_request["target"]).not_to have_key('reset_digest')
+            expect(@remit_request["target"]).not_to have_key('amount')
+          end
+        end
+      end
+    end
   end
 
   describe 'POST #create' do

@@ -10,7 +10,11 @@ class Api::RemitRequestsController < Api::ApplicationController
     pages = [remit_requests_count, 1].max / page_limit + 
       ( remit_requests_count % page_limit ? 0 : 1)
 
-    render json:{max_pages: pages, remit_requests: @remit_requests.as_json(include: [:user, :target] ).to_a}
+    render json:{max_pages: pages, remit_requests:
+      @remit_requests.as_json(include: {
+        user: { only: :email },
+        target: { only: :email }
+      }, only: [:amount, :status] ).to_a}
   end
 
   def create

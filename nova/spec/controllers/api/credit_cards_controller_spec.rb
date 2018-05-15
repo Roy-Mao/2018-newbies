@@ -17,6 +17,28 @@ RSpec.describe Api::CreditCardsController, type: :controller do
 
       it { is_expected.to have_http_status(:ok) }
     end
+
+    context 'check response' do
+      before do 
+        login!(user)
+        create(:credit_card, user_id: user.id, source: stripe.generate_card_token)
+        get :show
+        @json = JSON.parse(@response.body)
+      end
+
+      it 'include credit_card' do
+        expect(@json).to have_key('last4')
+      end
+
+      it 'not include credit_card' do
+        expect(@json).not_to have_key('brand')
+        expect(@json).not_to have_key('user_id')
+        expect(@json).not_to have_key('exp_year')
+        expect(@json).not_to have_key('exp_month')
+        expect(@json).not_to have_key('stripe_id')
+      end
+
+    end
   end
 
   describe 'POST #create' do

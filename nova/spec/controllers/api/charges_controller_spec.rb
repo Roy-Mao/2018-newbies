@@ -17,6 +17,27 @@ RSpec.describe Api::ChargesController, type: :controller do
 
       it { is_expected.to have_http_status(:ok) }
     end
+
+
+    context 'check response' do
+      before do 
+        login!(user)
+        create(:charge, {user_id: user.id})
+        get :index
+        @json = JSON.parse(response.body)["charges"][0]
+      end
+
+      it 'include charges' do
+        expect(@json).to have_key('amount')
+        expect(@json).to have_key('created_at')
+      end
+
+      it 'not include charges' do
+        expect(@json).not_to have_key('id')
+        expect(@json).not_to have_key('user_id')
+        expect(@json).not_to have_key('stripe_id')
+      end
+    end
   end
 
   describe 'POST #create' do

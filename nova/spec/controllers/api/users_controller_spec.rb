@@ -19,6 +19,30 @@ RSpec.describe Api::UsersController, type: :controller do
 
       it { is_expected.to have_http_status(:ok) }
     end
+
+
+    context 'response' do
+      before do 
+        login!(user)
+        get :show
+        @json = JSON.parse(response.body)
+      end
+
+      it 'include user' do
+        expect(@json).to have_key('nickname')
+        expect(@json).to have_key('email')
+        expect(@json).to have_key('amount')
+      end
+
+      it 'not include user' do
+        expect(@json).not_to have_key('id')
+        expect(@json).not_to have_key('stripe_id')
+        expect(@json).not_to have_key('activated')
+        expect(@json).not_to have_key('password_digest')
+        expect(@json).not_to have_key('activation_digest')
+        expect(@json).not_to have_key('reset_digest')
+      end
+    end
   end
 
   describe 'PUT #update' do
