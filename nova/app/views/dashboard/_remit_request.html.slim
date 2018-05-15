@@ -9,16 +9,32 @@
       thead
         tr
           th From
+          th To
           th Amount
+          th Status
           th.has-text-right
       tbody
         tr(v-for="remit in recvRemits")
-          td= '{{remit.user.nickname}}({{remit.user.email}})'
-          td= '{{-remit.amount}}円'
+          td(:class= "{'is-user-email': user.email === remit.target.email  }")= '{{remit.target.email}}'
+          td(:class= "{'is-user-email': user.email === remit.user.email}")= '{{remit.user.email}}'
+          td= '{{remit.amount}}円'
           td
-            .buttons.is-right
-              button.button.is-small(:disabled="amount < remit.amount" @click='accept(remit.id, $event)') Accept
-              button.button.is-small(@click='reject(remit.id, $event)') Reject
+            span.tag(v-bind:class='{\
+                "is-light":remit.status == "outstanding", \
+                "is-primary":remit.status == "accepted", \
+                "is-danger":remit.status == "rejected", \
+                "is-info":remit.status == "canceled" \
+                }')
+              = '{{remit.status}}'
+          td
+            .status-button(v-show="user.email === remit.target.email")
+              .buttons.is-right
+                button.button.is-small.is-link.is-outlined(v-bind:disabled="remit.status != 'outstanding'" @click='cancel(remit.id, $event)') Cancel
+            .status-button(v-show="user.email === remit.user.email")
+              .buttons.is-right
+                button.button.is-small.is-success(v-bind:disabled="remit.status != 'outstanding'" @click='accept(remit.id, $event)') Accept
+                button.button.is-small.is-danger(v-bind:disabled="remit.status != 'outstanding'" @click='reject(remit.id, $event)') Reject
+
     nav.pagination
       ul.pagination-list(v-for="(item, index) in new Array(maxPage)")
         li

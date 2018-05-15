@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
     data: {
       page: 1,
       currentTab: 'remits',
-      amount: 0,
       chargeForm: 0,
       chargeAmount: 0,
       charges: [],
@@ -73,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
       user: {
         email: "",
         nickname: "",
+        amount: 0
       },
       newRemitRequest: {
         emails: [],
@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       api.get('/api/charges').then(function(json) {
-        self.amount = json.amount;
         self.charges = json.charges;
         for (var i = 0; i < self.charges.length; i++){
           var strDateTime = self.charges[i]['created_at'];
@@ -101,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         then(function(json) {
           self.maxPage = json.max_pages
           self.recvRemits = json.remit_requests;
+          console.log(self.recvRemits[0].status);
           document.getElementsByClassName('pagination-link')[0].classList.add('is-current')
         });
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
-            self.amount += amount
+            self.user.amount += amount
             self.charges.unshift(json);
           }).
           catch(function(err) {
@@ -175,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests', this.newRemitRequest).
           then(function() {
+            // [TODO] fix change badge
             self.newRemitRequest = {
               emails: [],
               amount: 0,
@@ -185,29 +186,41 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       accept: function(id, event) {
         if(event) { event.preventDefault(); }
-
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
+        event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
+        console.log('accept')
         var self = this;
+
         api.post('/api/remit_requests/' + id + '/accept').
-          then(function() {
+          then(function(result) {
+            console.log(result)
             self.recvRemits = self.recvRemits.filter(function(r) {
-              if(r.id != id) {
-                return true
-              } else {
+              if(r.id == id) {
                 self.amount -= r.amount;
-                return false
               }
+              return true
             });
           });
       },
       reject: function(id, event) {
         if(event) { event.preventDefault(); }
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
+        event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
+        console.log('reject')
 
         var self = this;
         api.post('/api/remit_requests/' + id + '/reject').
           then(function() {
-            self.recvRemits = self.recvRemits.filter(function(r) {
-              return r.id != id;
-            });
+          });
+      },
+      cancel: function(id, event) {
+        event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // cancel button
+        if(event) { event.preventDefault(); }
+        console.log('cancel')
+
+        var self = this;
+        api.post('/api/remit_requests/' + id + '/cancel').
+          then(function() {
           });
       },
       updateUser: function(event) {
