@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       return fetch(path, opts).then(function(response) {
-        console.log(response);
         return response.json();
       });
     },
