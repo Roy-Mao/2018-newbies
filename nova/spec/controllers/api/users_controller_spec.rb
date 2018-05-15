@@ -19,6 +19,27 @@ RSpec.describe Api::UsersController, type: :controller do
 
       it { is_expected.to have_http_status(:ok) }
     end
+
+
+    context 'response' do
+      before do 
+        login!(user)
+        get :show
+        @json = JSON.parse(response.body)
+      end
+
+      it 'include nickname' do expect(@json.include?("nickname")).to eq true end
+      it 'include email'    do expect(@json.include?("email")).to eq true end
+      it 'include amount'   do expect(@json.include?("amount")).to eq true end
+
+      it 'not include id'                do expect(@json.include?("id")).to eq false end
+      it 'not include stripe_id'         do expect(@json.include?("stripe_id")).to eq false end
+      it 'not include activated'         do expect(@json.include?("activated")).to eq false end
+      it 'not include password_digest'   do expect(@json.include?("password_digest")).to eq false end
+      it 'not include activation_digest' do expect(@json.include?("activation_digest")).to eq false end
+      it 'not include reset_digest'      do expect(@json.include?("reset_digest")).to eq false end
+
+    end
   end
 
   describe 'PUT #update' do
