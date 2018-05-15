@@ -18,7 +18,14 @@
           td(:class= "{'is-user-email': user.email === remit.target.email  }")= '{{remit.target.email}}'
           td(:class= "{'is-user-email': user.email === remit.user.email}")= '{{remit.user.email}}'
           td= '{{remit.amount}}円'
-          td= '{{remit.status}}'
+          td
+            span.tag(v-bind:class='{\
+                "is-light":remit.status == "outstanding", \
+                "is-primary":remit.status == "accepted", \
+                "is-danger":remit.status == "rejected", \
+                "is-info":remit.status == "canceled" \
+                }')
+              = '{{remit.status}}'
           td
             .status-button(v-show="user.email === remit.target.email")
               .buttons.is-right
