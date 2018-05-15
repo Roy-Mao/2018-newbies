@@ -7,10 +7,25 @@ class Api::CreditCardsController < Api::ApplicationController
   end
 
   def create
-    current_user.credit_card.try(:destroy)
-    @credit_card = CreditCard.create!(credit_card_params.merge(user: current_user))
+    User.transaction do
+      current_user.credit_card.try(:destroy)
+      raise 'something happened here'
+      @credit_card = CreditCard.create!(credit_card_params.merge(user: current_user))
+      render json: @credit_card.as_json(only: %i[last4]), status: :created
+      
+      rescue ActiveRecord::RecordNotFound => e
+        raise ActiveRecord::Rollback, "RecordNotFound"
 
-    render json: @credit_card.as_json(only: :last4), status: :created
+      rescue ActiveRecord::ActiveRecordError => e
+        raise ActiveRecord::Rollback, "ActiveRecordError"
+
+      rescue StandardError => e
+        raise ActiveRecord::Rollback, "StandardError"
+
+      rescue Exception => e
+        raise ActiveRecord::Rollback, "SpecialError"
+    end
+
   end
 
   protected
