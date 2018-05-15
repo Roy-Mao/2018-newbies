@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         api.post('/api/remit_requests/' + id + '/accept').
           then(function(result) {
-            // console.log(self.recvRemits)
             console.log(result)
             self.recvRemits = self.recvRemits.filter(function(r) {
               if(r.id == id) {
@@ -212,10 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/reject').
           then(function() {
-            // console.log(self.recvRemits)
-            // self.recvRemits = self.recvRemits.filter(function(r) {
-            //   return r.id != id;
-            // });
           });
       },
       cancel: function(id, event) {
@@ -226,10 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/remit_requests/' + id + '/cancel').
           then(function() {
-            // console.log(self.recvRemits)
-            // self.recvRemits = self.recvRemits.filter(function(r) {
-            //   return r.id != id;
-            // });
           });
       },
       updateUser: function(event) {
