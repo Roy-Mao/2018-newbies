@@ -104,12 +104,12 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementsByClassName('pagination-link')[0].classList.add('is-current')
         });
 
-      setInterval(function() {
-        api.get('/api/remit_requests', { page: self.page }).
-          then(function(json) {
-            self.recvRemits = json.remit_requests;
-          });
-      }, 5000);
+      // setInterval(function() {
+      //   api.get('/api/remit_requests', { page: self.page }).
+      //     then(function(json) {
+      //       self.recvRemits = json.remit_requests;
+      //     });
+      // }, 5000);
     },
     mounted: function() {
       var form = document.getElementById('credit-card');
@@ -132,6 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
             self.user.amount += amount
+            console.log(json)
+            for (var i = 0; i < json.length; i++){
+              console.log(json[i]['created_at'])
+              var strDateTime = json[i]['created_at'];
+              var myDate = new Date(strDateTime);
+              json[i]['created_at'] = myDate.toLocaleString();
+            }
             self.charges.unshift(json);
           }).
           catch(function(err) {
