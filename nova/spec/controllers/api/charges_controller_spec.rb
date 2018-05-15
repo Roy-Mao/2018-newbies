@@ -17,6 +17,25 @@ RSpec.describe Api::ChargesController, type: :controller do
 
       it { is_expected.to have_http_status(:ok) }
     end
+
+
+    context 'check response' do
+      before do 
+        login!(user)
+        create(:charge, {user_id: user.id})
+        get :index
+        @charge = JSON.parse(response.body)["charges"][0]
+      end
+
+      it 'include amount' do expect(@charge.include?("amount")).to eq true end
+      it 'include created_at' do expect(@charge.include?("created_at")).to eq true end
+      #[TODO] accepted_at -> statusに変更する予定
+      xit 'include accepted_at' do expect(@charge.include?("accepted_at")).to eq true end
+
+      it 'not include id' do expect(@charge.include?("id")).to eq false end
+      it 'not include user_id' do expect(@charge.include?("user_id")).to eq false end
+
+    end
   end
 
   describe 'POST #create' do
