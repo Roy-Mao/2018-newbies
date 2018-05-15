@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_14_061717) do
+ActiveRecord::Schema.define(version: 2018_05_15_014229) do
 
   create_table "charges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -47,14 +47,12 @@ ActiveRecord::Schema.define(version: 2018_05_14_061717) do
     t.string "nickname", null: false
     t.string "email", null: false
     t.string "stripe_id"
-    t.boolean "staff", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "activation_digest"
     t.boolean "activated", default: false
     t.datetime "activated_at"
     t.string "password_digest"
-    t.string "remember_digest"
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.integer "amount", default: 0
