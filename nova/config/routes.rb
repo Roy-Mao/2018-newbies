@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: 'pages#root'
+  get '/dashboard', to: 'dashboard#show'
+  devise_for :users, controllers: { registrations: 'users/registrations', confirmations: 'users/confirmations' }
+
   namespace :api, defaults: { format: 'json' } do
     resource :user, only: %i[show update]
     resource :credit_card, only: %i[show create]
@@ -13,17 +17,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  get '/dashboard', to: 'dashboard#show'
-  get '/signup', to: 'users#new'
-  post '/signup', to: 'users#create'
-  get '/login', to: 'sessions#new'
-  post '/login', to: 'sessions#create'
-  get '/logout', to: 'sessions#destroy'
-
-  root to: 'pages#root'
-
-  resources :users
-  resources :account_activations, only:[:edit]
-  resources :password_resets, only: [:new, :create, :edit, :update]
 end

@@ -1,0 +1,8 @@
+- if @user.errors.present? || flash.present?
+  article.message.is-danger
+    .message-body
+      ul
+        - flash.each do |key, value|
+          = content_tag(:li, value, class: "#{key}")
+        - @user.errors.full_messages.each do |msg|
+          li= msg

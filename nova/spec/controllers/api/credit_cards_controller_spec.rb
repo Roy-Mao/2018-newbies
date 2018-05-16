@@ -13,14 +13,14 @@ RSpec.describe Api::CreditCardsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { sign_in(user) }
 
       it { is_expected.to have_http_status(:ok) }
     end
 
     context 'check response' do
-      before do 
-        login!(user)
+      before do
+        sign_in user
         create(:credit_card, user_id: user.id, source: stripe.generate_card_token)
         get :show
         @json = JSON.parse(@response.body)
@@ -49,7 +49,7 @@ RSpec.describe Api::CreditCardsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { sign_in(user) }
 
       it { is_expected.to have_http_status(:created) }
     end
