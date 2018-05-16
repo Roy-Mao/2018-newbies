@@ -9,7 +9,7 @@ FactoryBot.define do
     trait :with_activated do
       after(:create) do |user|
         customer = Stripe::Customer.create( email: user.email, description: "User: #{user.id}" )
-        user.update(activated: true, activated_at: Time.now, stripe_id: customer.id)
+        user.update(stripe_id: customer.id)
       end
     end
   end
