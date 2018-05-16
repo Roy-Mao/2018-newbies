@@ -74,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
       user: {
         email: "",
         nickname: "",
-        amount: 0
+        amount: 0,
+        password: "",
       },
       newRemitRequest: {
         emails: [],
