@@ -14,7 +14,7 @@ class Api::RemitRequestsController < Api::ApplicationController
       @remit_requests.as_json(include: {
         user: { only: :email },
         target: { only: :email }
-      }, only: [:amount, :status] ).to_a}
+      }, only: [:amount, :status, :id] ).to_a}
   end
 
   def create

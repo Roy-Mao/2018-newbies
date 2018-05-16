@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_05_15_045823) do
     t.string "stripe_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_credit_cards_on_user_id", unique: true
+    t.index ["user_id"], name: "index_credit_cards_on_user_id"
   end
 
   create_table "remit_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

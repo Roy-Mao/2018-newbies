@@ -50,7 +50,6 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       it 'not include response' do
-        expect(@json).not_to have_key('id')
         expect(@json).not_to have_key('user_id')
         expect(@json).not_to have_key('stripe_id')
       end
@@ -60,10 +59,10 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
         it 'include remit_request' do
           expect(@remit_request).to have_key('status')
           expect(@remit_request).to have_key('amount')
+          expect(@remit_request).to have_key('id')
         end
 
         it 'not include remit_request' do
-          expect(@remit_request).not_to have_key('id')
           expect(@remit_request).not_to have_key('user_id')
           expect(@remit_request).not_to have_key('target_id')
         end
