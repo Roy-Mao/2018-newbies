@@ -1,0 +1,18 @@
+= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  .field
+    = f.label :email
+    .control
+    = f.email_field :email, autofocus: true, autocomplete: "email", class: 'input'
+  .field
+    = f.label :password
+    .control
+    = f.password_field :password, autocomplete: "off", class: 'input'
+  .field
+    .control.has-text-right
+    = f.submit 'Login', class: 'button is-primary'
+
+- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+  = link_to "パスワードをお忘れですか？", new_password_path(resource_name)
+br
+- if devise_mapping.confirmable? && controller_name != 'confirmations'
+  = link_to "確認のメールが届きませんでしたか?", new_confirmation_path(resource_name)
