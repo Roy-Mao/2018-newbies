@@ -33,11 +33,10 @@ class Api::RemitRequestsController < Api::ApplicationController
     @amount = 0
     if @remit_request.status == 'outstanding'
       @remit_request.update!(status: :accepted)
-      @amount = current_user.amount - @remit_request.amount
+      @amount = @remit_request.amount
       current_user.update(amount: @amount)
     end
     render json: {amount: @amount}, status: :ok
-
   end
 
   def reject

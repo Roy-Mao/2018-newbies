@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::RemitRequestsController, type: :controller do
-  let(:user) { create(:user, :with_activated) }
-  let(:target) { create(:user, :with_activated) }
-  let(:remit_request) { create(:remit_request, target: user) }
+  let(:sender) { create(:user, :with_activated) }
+  let(:receiver) { create(:user, :with_activated) }
+  let(:amount) { 100 }
+  let(:remit_request) { create(:remit_request, user: sender, target: receiver, amount: amount) }
 
   describe 'GET #index' do
     context 'without page params' do
@@ -16,7 +17,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       context 'with logged in' do
-        before { login!(user) }
+        before { login!(receiver) }
 
         it { is_expected.to have_http_status(:ok) }
       end
@@ -30,7 +31,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       context 'with logged in' do
-        before { login!(user) }
+        before { login!(receiver) }
 
         it { is_expected.to have_http_status(:ok) }
       end
@@ -38,8 +39,8 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
 
     context 'check response' do
       before do 
-        login!(user)
-        create(:remit_request, target: user)
+        login!(receiver)
+        create(:remit_request, target: receiver)
         get :index
         @json = JSON.parse(response.body)
       end
@@ -104,30 +105,41 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
   end
 
   describe 'POST #create' do
-    subject { post :create, params: { emails: [target.email], amount: 3000 } }
+    subject { post :create, params: { emails: [receiver.email], amount: 3000 } }
 
     context 'without logged in' do
       it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { login!(receiver) }
 
       it { is_expected.to have_http_status(:created) }
     end
   end
 
   describe 'POST #accept' do
-    subject { post :accept, params: { id: remit_request.id } }
 
     context 'without logged in' do
+      subject { post :accept, params: { id: remit_request.id } }
       it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      subject { post :accept, params: { id: remit_request.id } }
+      before do
+        login!(receiver)
+        post :accept, params: { id: remit_request.id }
+        @json = JSON.parse(response.body)
+      end
 
       it { is_expected.to have_http_status(:ok) }
+    
+      context 'return amount' do
+        it do
+          expect(@json["amount"]).to eq amount
+        end
+      end
     end
   end
 
@@ -139,7 +151,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { login!(receiver) }
 
       it { is_expected.to have_http_status(:ok) }
     end
@@ -153,7 +165,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { login!(receiver) }
 
       it { is_expected.to have_http_status(:ok) }
     end
