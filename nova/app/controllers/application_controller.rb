@@ -6,10 +6,10 @@ class ApplicationController < ActionController::Base
   private
   # Confirms a logged-in user.
   def logged_in_user
-    unless logged_in?
+    unless user_signed_in?
       store_location
       flash[:alert] = "ログインしてください"
-      redirect_to login_url
+      redirect_to new_user_session_path
     end
   end
 end
