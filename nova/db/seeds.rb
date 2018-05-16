@@ -11,19 +11,15 @@ user = User.create({
   nickname: 'geru',
   password: 'h0gehoge',
   email: 'geru@gmail.com',
-  activated: true,
-  activated_at: DateTime.now
+  confirmed_at: Date.today,
 })
-user.activate
 
 user = User.create({
   nickname: 'hoge',
   password: 'h0gehoge',
   email: 'hoge@gmail.com',
-  activated: true,
-  activated_at: DateTime.now
+  confirmed_at: Date.today,
 })
-user.activate
 
 20.times.each do |i|
   RemitRequest.create(user: User.first, target: User.second, amount: 100)
