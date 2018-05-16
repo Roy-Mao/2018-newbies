@@ -24,7 +24,6 @@ class CreditCard < ApplicationRecord
 
   def create_stripe_card
     return if stripe_id?
-
     card = user.stripe.sources.create(source: source)
     assign_attributes(
       stripe_id: card.id,

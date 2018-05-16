@@ -7,21 +7,23 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create({
+user = User.create({
   nickname: 'geru',
   password: 'h0gehoge',
   email: 'geru@gmail.com',
   activated: true,
   activated_at: DateTime.now
 })
+user.activate
 
-User.create({
+user = User.create({
   nickname: 'hoge',
   password: 'h0gehoge',
   email: 'hoge@gmail.com',
   activated: true,
   activated_at: DateTime.now
 })
+user.activate
 
 20.times.each do |i|
   RemitRequest.create(user: User.first, target: User.second, amount: 100)

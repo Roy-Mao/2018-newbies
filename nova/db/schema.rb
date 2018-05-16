@@ -17,6 +17,8 @@ ActiveRecord::Schema.define(version: 2018_05_16_015620) do
     t.integer "amount", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+    t.string "stripe_id"
     t.index ["user_id"], name: "index_charges_on_user_id"
   end
 
@@ -29,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_05_16_015620) do
     t.string "stripe_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_credit_cards_on_user_id", unique: true
+    t.index ["user_id"], name: "index_credit_cards_on_user_id"
   end
 
   create_table "remit_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

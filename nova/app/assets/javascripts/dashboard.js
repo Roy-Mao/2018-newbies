@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
       creditCardUpdateStatus: false,
       isActiveNewRemitForm: false,
       isChargeConfirm: false,
+      updateCreditCardStatus: '',
+      updateCreditCardStatusMessage: '',
       target: "",
       user: {
         email: "",
@@ -131,7 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
-            self.user.amount += amount
+
+            if(json.status == 'accepted')
+              self.user.amount += amount;
+            var myDate = new Date(json['created_at']);
+            json['created_at'] = myDate.toLocaleString();
             self.charges.unshift(json);
           }).
           catch(function(err) {
@@ -147,10 +153,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return api.post('/api/credit_card', { credit_card: { source: result.token.id }});
           }).
           then(function(result) {
-            var last4 = result.last4
+            if (result.last4){
+              var last4 = result.last4
+              self.hasCreditCard = true;
+              self.updateCreditCardStatusMessage = "クレジットカードの変更が完了しました。"
+              self.updateCreditCardStatus = 'success';
+              document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。';
+            } else {
+              self.updateCreditCardStatusMessage = 'エラーが発生しました。';
+              self.updateCreditCardStatus = 'failed';
+            }
+
             self.creditCardUpdateStatus = true;
-            self.hasCreditCard = true;
-            document.getElementById('card_status').innerText = '登録済クレジットカードの情報 : 下4桁は' + last4 + 'です。'
             setTimeout(function(){
               self.creditCardUpdateStatus = false;
             }, 5000)

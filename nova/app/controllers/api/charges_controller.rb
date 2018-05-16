@@ -4,12 +4,16 @@ class Api::ChargesController < Api::ApplicationController
   def index
     @charges = current_user.charges.order(id: :desc).limit(50)
 
-    render json: { charges: @charges.as_json(only: [:amount, :created_at, :accepted_at]) }
+    render json: { charges: @charges.as_json(only: [:amount, :created_at, :status]) }
   end
 
   def create
-    @charge = current_user.charges.create!(amount: params[:amount])
+    begin
+      @charge = current_user.charges.create!(amount: params[:amount])
 
-    render json: @charge, status: :created
+      render json: @charge, status: :created
+    rescue => e
+      render json: @charge, status: :service_unavailable
+    end
   end
 end
