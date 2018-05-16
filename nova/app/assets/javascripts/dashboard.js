@@ -74,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
       user: {
         email: "",
         nickname: "",
-        amount: 0
+        amount: 0,
+        password: "",
       },
       newRemitRequest: {
         emails: [],
@@ -100,15 +101,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
       api.get('/api/remit_requests').
         then(function(json) {
+          self.user.amount = json.amount
           self.maxPage = json.max_pages
           self.recvRemits = json.remit_requests;
-          console.log(self.recvRemits[0].status);
           document.getElementsByClassName('pagination-link')[0].classList.add('is-current')
         });
 
       setInterval(function() {
         api.get('/api/remit_requests', { page: self.page }).
           then(function(json) {
+            self.user.amount = json.amount
             self.recvRemits = json.remit_requests;
           });
       }, 5000);
@@ -202,25 +204,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if(event) { event.preventDefault(); }
         event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
         event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
-        console.log('accept')
         var self = this;
 
         api.post('/api/remit_requests/' + id + '/accept').
           then(function(result) {
-            console.log(result)
-            self.recvRemits = self.recvRemits.filter(function(r) {
-              if(r.id == id) {
-                self.amount -= r.amount;
-              }
-              return true
-            });
+            self.user.amount = result.amount
           });
       },
       reject: function(id, event) {
         if(event) { event.preventDefault(); }
         event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // accept button
         event.path[1].getElementsByTagName('button')[1].disabled =  "true"; // reject button
-        console.log('reject')
 
         var self = this;
         api.post('/api/remit_requests/' + id + '/reject').
@@ -230,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
       cancel: function(id, event) {
         event.path[1].getElementsByTagName('button')[0].disabled =  "true"; // cancel button
         if(event) { event.preventDefault(); }
-        console.log('cancel')
 
         var self = this;
         api.post('/api/remit_requests/' + id + '/cancel').
