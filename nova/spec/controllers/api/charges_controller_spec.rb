@@ -18,7 +18,6 @@ RSpec.describe Api::ChargesController, type: :controller do
       it { is_expected.to have_http_status(:ok) }
     end
 
-
     context 'check response' do
       before do 
         login!(user)
@@ -30,6 +29,7 @@ RSpec.describe Api::ChargesController, type: :controller do
       it 'include charges' do
         expect(@json).to have_key('amount')
         expect(@json).to have_key('created_at')
+        expect(@json).to have_key('status')
       end
 
       it 'not include charges' do
@@ -54,6 +54,21 @@ RSpec.describe Api::ChargesController, type: :controller do
       end
 
       it { is_expected.to have_http_status(:created) }
+
+    context 'check response' do
+      before do 
+        login!(user)
+        create(:charge, {user_id: user.id})
+        get :index
+        @json = JSON.parse(response.body)["charges"][0]
+      end
+
+      it 'include charges' do
+        expect(@json).to have_key('amount')
+        expect(@json).to have_key('created_at')
+        expect(@json).to have_key('status')
+      end
+    end
     end
   end
 end

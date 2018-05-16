@@ -36,4 +36,26 @@ RSpec.describe Charge, type: :model do
       it { is_expected.to be_valid }
     end
   end
+
+  describe 'enum status' do
+    context 'outstanding' do
+      let(:charge) { build(:charge) }
+
+      it do expect(charge.status).to eq "outstanding" end
+    end
+
+    context 'accepted' do
+      let(:charge) { build(:charge, status: 1) }
+
+      it do expect(charge.status).to eq "accepted" end
+    end
+
+    context 'rejected' do
+      let(:charge) { build(:charge, status: 2) }
+
+      it do expect(charge.status).to eq "standing" end
+    end
+
+
+  end
 end

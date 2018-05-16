@@ -133,7 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var self = this;
         api.post('/api/charges', { amount: amount }).
           then(function(json) {
-            self.user.amount += amount
+
+            if(json.status == 'accepted')
+              self.user.amount += amount;
+            var myDate = new Date(json['created_at']);
+            json['created_at'] = myDate.toLocaleString();
             self.charges.unshift(json);
           }).
           catch(function(err) {
