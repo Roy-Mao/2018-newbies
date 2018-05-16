@@ -15,15 +15,15 @@ RSpec.describe Api::UsersController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { sign_in(user) }
 
       it { is_expected.to have_http_status(:ok) }
     end
 
 
     context 'response' do
-      before do 
-        login!(user)
+      before do
+        sign_in user
         get :show
         @json = JSON.parse(response.body)
       end
@@ -54,7 +54,7 @@ RSpec.describe Api::UsersController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
+      before { sign_in(user) }
 
       context 'with invalid params' do
         let(:user_params) { {} }
