@@ -15,8 +15,8 @@
           th.has-text-right
       tbody
         tr(v-for="remit in recvRemits")
-          td(:class= "{'is-user-email': user.email === remit.target.email  }")= '{{remit.target.email}}'
           td(:class= "{'is-user-email': user.email === remit.user.email}")= '{{remit.user.email}}'
+          td(:class= "{'is-user-email': user.email === remit.target.email  }")= '{{remit.target.email}}'
           td= '{{remit.amount}}円'
           td
             span.tag(v-bind:class='{\
