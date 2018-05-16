@@ -5,6 +5,7 @@ html(lang="#{I18n.locale}" class="#{html_classes.join(' ')}")
     = display_meta_tags(default_meta_tags)
     = stylesheet_link_tag :application, media: 'all'
     = javascript_include_tag :application, defer: true
+    = csrf_meta_tags
     = content_for?(:head) ? yield(:head) : nil
   body
     - if content_for?(:body)
@@ -16,16 +17,16 @@ html(lang="#{I18n.locale}" class="#{html_classes.join(' ')}")
             .container
                 .navbar-menu
                   .navbar-end
-                    - if logged_in?
+                    - if user_signed_in?
                       span.navbar-item
                         = link_to 'Dashboard', dashboard_path, class: 'button is-primary'
                       span.navbar-item
-                        = link_to 'Logout', logout_path, class: 'button is-inverted is-dark'
+                        = link_to 'Logout', destroy_user_session_path, class: 'button is-inverted is-dark', method: :delete
                     - else
                       span.navbar-item
-                        = link_to 'Login', login_path, class: 'button is-inverted is-dark'
+                        = link_to 'Login', new_user_session_path, class: 'button is-inverted is-dark'
                       span.navbar-item
-                        = link_to 'Signup', signup_path, class: 'button is-primary'
+                        = link_to 'Signup', new_user_registration_path, class: 'button is-primary'
         .hero-body
           .container
             .columns
@@ -41,4 +42,3 @@ html(lang="#{I18n.locale}" class="#{html_classes.join(' ')}")
 
               = render 'layouts/flash'
               = yield
-

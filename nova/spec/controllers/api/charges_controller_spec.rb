@@ -13,14 +13,15 @@ RSpec.describe Api::ChargesController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(user) }
-
-      it { is_expected.to have_http_status(:ok) }
+      it do
+        sign_in(user)
+        is_expected.to have_http_status(:ok)
+      end
     end
 
     context 'check response' do
-      before do 
-        login!(user)
+      before do
+        sign_in user
         create(:charge, {user_id: user.id})
         get :index
         @json = JSON.parse(response.body)["charges"][0]
@@ -50,14 +51,14 @@ RSpec.describe Api::ChargesController, type: :controller do
     context 'with logged in' do
       before do
         create(:credit_card, user: user, source: stripe.generate_card_token)
-        login!(user)
+        sign_in user
       end
 
       it { is_expected.to have_http_status(:created) }
 
     context 'check response' do
-      before do 
-        login!(user)
+      before do
+        sign_in user
         create(:charge, {user_id: user.id})
         get :index
         @json = JSON.parse(response.body)["charges"][0]

@@ -31,7 +31,7 @@ Rails.application.configure do
   # --------------mailer setting from here------------
   # Don't care if the mailer can't send.
 
-  config.action_mailer.delivery_method = :test
+  config.action_mailer.delivery_method = :letter_opener
 
   #config.action_mailer.perform_caching = false
 

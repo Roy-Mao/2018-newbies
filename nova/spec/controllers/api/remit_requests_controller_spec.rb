@@ -17,7 +17,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       context 'with logged in' do
-        before { login!(receiver) }
+        before { sign_in(receiver) }
 
         it { is_expected.to have_http_status(:ok) }
       end
@@ -31,16 +31,16 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       context 'with logged in' do
-        before { login!(receiver) }
+        before { sign_in(receiver) }
 
         it { is_expected.to have_http_status(:ok) }
       end
     end
 
     context 'check response' do
-      before do 
-        login!(receiver)
-        create(:remit_request, target: receiver)
+      before do
+        sign_in user
+        create(:remit_request, target: user)
         get :index
         @json = JSON.parse(response.body)
       end
@@ -112,7 +112,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(receiver) }
+      before { sign_in(receiver) }
 
       it { is_expected.to have_http_status(:created) }
     end
@@ -126,12 +126,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      subject { post :accept, params: { id: remit_request.id } }
-      before do
-        login!(receiver)
-        post :accept, params: { id: remit_request.id }
-        @json = JSON.parse(response.body)
-      end
+      before { sign_in(receiver) }
 
       it { is_expected.to have_http_status(:ok) }
       it { expect(@json["amount"]).to eq amount }
@@ -146,7 +141,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(receiver) }
+      before { sign_in(receiver) }
 
       it { is_expected.to have_http_status(:ok) }
     end
@@ -160,7 +155,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { login!(receiver) }
+      before { sign_in(receiver) }
 
       it { is_expected.to have_http_status(:ok) }
     end
