@@ -66,7 +66,7 @@ Rails.application.configure do
 
   host = 'http://app-panda-2097416765.ap-northeast-1.elb.amazonaws.com'
 
-  config.action_mailer.default_url_options = { host: host, protocol: 'https'}
+  config.action_mailer.default_url_options = { host: host, protocol: 'http'}
 
   config.action_mailer.perform_caching = false
 
