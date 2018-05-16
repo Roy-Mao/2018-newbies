@@ -48,6 +48,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       it 'include response' do
         expect(@json).to have_key('max_pages')
         expect(@json).to have_key('remit_requests')
+        expect(@json).to have_key('amount')
       end
 
       it 'not include response' do
