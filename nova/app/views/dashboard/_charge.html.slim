@@ -5,8 +5,16 @@
       thead
         tr
           th Amount
+          th Status
           th.has-text-right Date
       tbody
         tr(v-for="charge in charges")
           td= '{{charge.amount}}円'
+          td
+            span.tag(v-bind:class='{\
+                  "is-light":charge.status == "outstanding", \
+                  "is-info":charge.status == "accepted", \
+                  "is-danger":charge.status == "standing", \
+                }')
+              = '{{charge.status}}'
           td.has-text-right= '{{charge.created_at}}'
