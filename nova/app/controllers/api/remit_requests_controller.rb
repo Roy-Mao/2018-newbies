@@ -30,13 +30,7 @@ class Api::RemitRequestsController < Api::ApplicationController
   def accept
     @remit_request = RemitRequest.find(params[:id])
 
-    @amount = 0
-    if @remit_request.status == 'outstanding'
-      @remit_request.update!(status: :accepted)
-      @amount = @remit_request.amount
-      current_user.update(amount: @amount)
-    end
-    render json: {amount: @amount}, status: :ok
+    render json: {amount: @remit_request.change_status_accept}, status: :ok
   end
 
   def reject
