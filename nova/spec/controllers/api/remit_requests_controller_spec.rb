@@ -39,8 +39,8 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
 
     context 'check response' do
       before do
-        sign_in user
-        create(:remit_request, target: user)
+        sign_in receiver
+        create(:remit_request, target: receiver)
         get :index
         @json = JSON.parse(response.body)
       end
@@ -126,7 +126,12 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
     end
 
     context 'with logged in' do
-      before { sign_in(receiver) }
+      subject { post :accept, params: { id: remit_request.id } }
+      before do
+        sign_in(receiver)
+        post :accept, params: { id: remit_request.id }
+        @json = JSON.parse(response.body)
+      end
 
       it { is_expected.to have_http_status(:ok) }
       it { expect(@json["amount"]).to eq amount }
