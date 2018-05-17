@@ -21,8 +21,11 @@ class Charge < ApplicationRecord
     )
 
     # Stripe::Chargeが正常に動作したら
-
-    user.update!(amount: user.amount + amount)
+    User.transaction do
+      user.lock!
+      user.update!(amount: user.amount + amount)
+      user.save!
+    end
     charge = Stripe::Charge.retrieve(response["id"])
     charge.capture
     self.update!(status: :accepted, stripe_id: response.id)

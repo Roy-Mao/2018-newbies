@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'spec_helper'
 
 RSpec.describe Charge, type: :model do
   describe 'validation' do
@@ -37,6 +38,26 @@ RSpec.describe Charge, type: :model do
     end
   end
 
+  describe 'charge value' do
+    context 'not registrated creditcard' do
+      let(:user) { create(:user, amount: 0) }
+      subject(:charge) { create(:charge, amount: 100, user: user) }
+      it do
+        expect(charge.status).to eq 'standing'
+        expect(charge.user.amount).to eq 0
+      end
+    end
+
+    context 'registrated creditcard' do
+      let(:user) { create(:user, :with_registrated_stripe, amount: 0) }
+      subject(:charge) { create(:charge, amount: 100, user: user) }
+      it do
+        expect(charge.status).to eq 'accepted'
+        expect(charge.user.amount).to eq 100
+      end
+    end
+  end
+
   describe 'enum status' do
     context 'outstanding' do
       let(:charge) { build(:charge) }
@@ -55,7 +76,5 @@ RSpec.describe Charge, type: :model do
 
       it do expect(charge.status).to eq "standing" end
     end
-
-
   end
 end
