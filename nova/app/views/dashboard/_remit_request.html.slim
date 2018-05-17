@@ -1,10 +1,10 @@
 #remit_request.columns(v-if="currentTab === 'remits'")
   .column.is-12
-    .heading Remit Requests
-
-    .section
-      button.button.is-info.is-fullwidth(@click="isActiveNewRemitForm = true")
-        | Make New Remit Request
+    - if current_user.credit_card
+      .heading Remit Requests
+        .section
+          button.button.is-info.is-fullwidth(@click="isActiveNewRemitForm = true")
+            | Make New Remit Request
     table.table.is-fullwidth
       thead
         tr
