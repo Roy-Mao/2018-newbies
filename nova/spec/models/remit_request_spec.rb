@@ -39,14 +39,14 @@ RSpec.describe RemitRequest, type: :model do
     context "change value" do
       it do
         remit_request.change_status_accept
-        expect(sender.amount).to eq 900
-        expect(receiver.amount).to eq 1100
+        expect(sender.amount).to eq 1100
+        expect(receiver.amount).to eq 900
       end
     end
 
     context "return value value" do
       it do
-        expect(remit_request.change_status_accept).to eq 1100
+        expect(remit_request.change_status_accept).to eq 900
       end
     end
   end
