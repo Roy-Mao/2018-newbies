@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::RemitRequestsController, type: :controller do
   let(:sender) { create(:user, :with_activated) }
-  let(:receiver) { create(:user, :with_activated) }
+  let(:receiver) { create(:user, :with_activated, amount: 1000) }
   let(:amount) { 100 }
   let(:remit_request) { create(:remit_request, user: sender, target: receiver, amount: amount) }
 
@@ -134,7 +134,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       it { is_expected.to have_http_status(:ok) }
-      it { expect(@json["amount"]).to eq -amount }
+      it { expect(@json["amount"]).to eq 900 }
     end
   end
 
