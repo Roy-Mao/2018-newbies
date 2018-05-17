@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
           self.user.amount = json.amount
           self.maxPage = json.max_pages
           self.recvRemits = json.remit_requests;
-          document.getElementsByClassName('pagination-link')[0].classList.add('is-current')
         });
 
       setInterval(function() {
