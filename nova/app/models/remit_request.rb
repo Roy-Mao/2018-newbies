@@ -8,7 +8,7 @@ class RemitRequest < ApplicationRecord
   belongs_to :user
   belongs_to :target, class_name: 'User'
 
-  validates :amount, numericality: { greater_then: 0 }
+  validates :amount, numericality: { greater_than: 0 }
   paginates_per 10
 
   enum status: { outstanding: 0, accepted: 1, rejected: 2, canceled: 3 }
@@ -16,8 +16,8 @@ class RemitRequest < ApplicationRecord
   def change_status_accept
     if self.status == 'outstanding'
       self.status = :accepted
-      self.user.amount -= self.amount
-      self.target.amount += self.amount
+      self.user.amount += self.amount
+      self.target.amount -= self.amount
     end
     self.save!
     self.user.save!
