@@ -135,7 +135,7 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
       end
 
       it { is_expected.to have_http_status(:ok) }
-      it { expect(@json["amount"]).to eq amount }
+      it { expect(@json["amount"]).to eq -amount }
     end
   end
 

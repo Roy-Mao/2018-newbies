@@ -16,8 +16,8 @@ class RemitRequest < ApplicationRecord
   def change_status_accept
     if self.status == 'outstanding'
       self.status = :accepted
-      self.user.amount -= self.amount
-      self.target.amount += self.amount
+      self.user.amount += self.amount
+      self.target.amount -= self.amount
     end
     self.save!
     self.user.save!
