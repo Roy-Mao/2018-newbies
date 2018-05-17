@@ -31,22 +31,22 @@ RSpec.describe RemitRequest, type: :model do
   end
 
   describe 'update' do
-    let(:user) { create(:user, :with_activated, amount: 1000) }
-    let(:target) { create(:user, :with_activated, amount: 1000) }
-    let(:remit_request) { create(:remit_request, user: user, target: target, amount: 100) }
+    let(:sender) { create(:user, :with_activated, amount: 1000) }
+    let(:receiver) { create(:user, :with_activated, amount: 1000) }
+    let(:remit_request) { create(:remit_request, user: sender, target: receiver, amount: 100) }
 
 
     context "change value" do
       it do
         remit_request.change_status_accept
-        expect(target.amount).to eq 900
-        expect(user.amount).to eq 1100
+        expect(sender.amount).to eq 900
+        expect(receiver.amount).to eq 1100
       end
     end
 
     context "return value value" do
       it do
-        expect(remit_request.change_status_accept).to eq 900
+        expect(remit_request.change_status_accept).to eq 1100
       end
     end
   end
