@@ -36,8 +36,3 @@
               .buttons.is-right
                 button.button.is-small.is-success(v-bind:disabled="remit.status != 'outstanding'" @click='accept(remit.id, $event)') Accept
                 button.button.is-small.is-danger(v-bind:disabled="remit.status != 'outstanding'" @click='reject(remit.id, $event)') Reject
-
-    nav.pagination
-      ul.pagination-list(v-for="(item, index) in new Array(maxPage)")
-        li
-          a.pagination-link aria-label=("Goto page {index}") @click='jumpRemixPage(index + 1, $event)'  {{index + 1}}
