@@ -14,5 +14,9 @@ FactoryBot.define do
         user.update(stripe_id: customer.id)
       end
     end
+
+    trait :with_registrated_stripe do
+      stripe_id 'cus_Cs5fSgqugU33Th'
+    end
   end
 end
