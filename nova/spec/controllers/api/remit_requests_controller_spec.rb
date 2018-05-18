@@ -6,7 +6,11 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
   let(:sender) { create(:user, :with_activated) }
   let(:receiver) { create(:user, :with_activated, amount: 1000) }
   let(:amount) { 100 }
+  let(:large_amount) { 100000 }
+  let(:same_amount) { 1000 }
   let(:remit_request) { create(:remit_request, user: sender, target: receiver, amount: amount) }
+  let(:large_remit_request) { create(:remit_request, user:sender, target: receiver, amount: large_amount)}
+  let(:same_remit_request) { create(:remit_request, user:sender, target: receiver, amount: same_amount) }
 
   describe 'GET #index' do
     context 'without page params' do
@@ -132,9 +136,31 @@ RSpec.describe Api::RemitRequestsController, type: :controller do
         post :accept, params: { id: remit_request.id }
         @json = JSON.parse(response.body)
       end
-
       it { is_expected.to have_http_status(:ok) }
       it { expect(@json["amount"]).to eq 900 }
+    end
+
+    context 'with large request remit amount' do
+      subject { post :accept, params: { id: large_remit_request.id } }
+      before do 
+        sign_in(receiver)
+        post :accept, params: { id: large_remit_request.id }
+        @json = JSON.parse(response.body)
+      end
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(@json["amount"]).to eq 1000 }    
+    end
+
+
+    context 'with same request remit amount' do
+      subject {post :accept, params: { id: same_remit_request.id }}
+      before do
+        sign_in(receiver)
+        post :accept, params: { id: same_remit_request.id }
+        @json = JSON.parse(response.body)
+      end
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(@json["amount"]).to eq 0 }
     end
   end
 
